@@ -1,6 +1,7 @@
 <?php
-// include "incomeContoller.php";
+require "incomeController.php";
 require "config.php";
+addIncome($pdo);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,17 +46,36 @@ require "config.php";
 
                 <div class="bg-white p-6 rounded-xl shadow border border-pink-200">
                     <h2 class="text-pink-500 text-sm">Total Revenus</h2>
-                    <p class="text-3xl font-bold text-pink-700">0 MAD</p>
+                    <p class="text-3xl font-bold text-pink-700"><?php
+                    $stmt=$pdo->query("SELECT SUM(amount) as total from incomes");
+                    $total_incomes=$stmt->fetch();
+                    echo  $total_incomes['total'];
+                    ?></p>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow border border-pink-200">
                     <h2 class="text-pink-500 text-sm">Total Dépenses</h2>
-                    <p class="text-3xl font-bold text-pink-700">0 MAD</p>
+                    <p class="text-3xl font-bold text-pink-700"><?php
+                    $stmt=$pdo->query("SELECT SUM(amount) as total from expenses");
+                    $total_depenses=$stmt->fetch();
+                
+                    echo  $total_depenses['total'];
+                    ?></p>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow border border-pink-200">
                     <h2 class="text-pink-500 text-sm">Solde</h2>
-                    <p class="text-3xl font-bold text-pink-700">0 MAD</p>
+                    <p class="text-3xl font-bold text-pink-700"><?php 
+                    $stmt=$pdo->query("SELECT SUM(amount) as total from expenses");
+                    $total_depenses=$stmt->fetch();
+                    $depenses=$total_depenses['total'];
+                     $stmt=$pdo->query("SELECT SUM(amount) as total from incomes");
+                    $total_incomes=$stmt->fetch();
+                    $incomes=$total_incomes['total'];
+
+                    $solde= $incomes- $depenses;
+                    echo $solde;
+                    ?></p>
                 </div>
 
             </div>
@@ -82,8 +102,12 @@ require "config.php";
                             <td class=\"px-4 py-2\">{$row['desp']}</td>
                             <td class=\"px-4 py-2\">{$row['amount']}</td>
                             <td class=\"px-4 py-2 flex gap-2\">
-                                <button class=\"bg-yellow-400 text-white px-2 py-1 rounded\">Modifier</button>
-                                <button class=\"bg-rose-500 text-white px-2 py-1 rounded\">Supprimer</button>
+                            <form action=\"delete.php\" method=\"GET\">
+                              <input name=\"id\" type=\"text\" class=\"hidden\" value=\"{$row['id']}\"/>
+
+                                <button  name=\"delete_income\" type=\"submit\" class=\"supprimer  bg-rose-500 text-white px-2 py-1 rounded\">Supprimer</button>
+                                </form>
+                                <button  type=\"submit\"  class=\"modifier  bg-yellow-400 text-white px-2 py-1 rounded\" >Modifier</button>
                             </td>
                    </tr> ";
                  }
@@ -104,16 +128,27 @@ require "config.php";
                             <th class="text-left px-4 py-2">Montant</th>
                             <th class="text-left px-4 py-2">Actions</th>
                         </tr>
+ <?php 
 
-                        <tr>
-                            <td class="px-4 py-2">02/12/2025</td>
-                            <td class="px-4 py-2">Courses</td>
-                            <td class="px-4 py-2">150 MAD</td>
-                            <td class="px-4 py-2 flex gap-2">
-                                <button class="bg-yellow-400 text-white px-2 py-1 rounded">Modifier</button>
-                                <button class="bg-rose-500 text-white px-2 py-1 rounded">Supprimer</button>
+$stmt=$pdo->query("select * from expenses");
+while($row=$stmt->fetch(PDO:: FETCH_ASSOC)){
+    echo"<tr>
+                            <td class=\"px-4 py-2\">{$row['date_expense']}</td>
+                            <td class=\"px-4 py-2\">{$row['desp']}</td>
+                            <td class=\"px-4 py-2\">{$row['amount']}</td>
+                            <td class=\"px-4 py-2 flex gap-2\">
+                            <form method=\"GET\" action=\"delete.php\">
+                              <input name=\"id\" type=\"text\" class=\"hidden\" value=\" {$row['id']} \"/>
+                                <button name=\"delete_depense\"  class=\"supprimer  bg-rose-500 text-white px-2 py-1 rounded\">Supprimer</button>
+                                 </form>
+                                 <button  type=\"submit\"  class=\"modifier  bg-yellow-400 text-white px-2 py-1 rounded\" >Modifier</button>
                             </td>
-                        </tr>
+                   </tr> ";
+    
+}
+
+ ?>
+                       
                     </table>
                 </div>
 
