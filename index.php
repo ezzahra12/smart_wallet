@@ -107,9 +107,11 @@ addIncome($pdo);
 
                                 <button  name=\"delete_income\" type=\"submit\" class=\"supprimer  bg-rose-500 text-white px-2 py-1 rounded\">Supprimer</button>
                                 </form>
-                                <button  type=\"submit\"  class=\"modifier  bg-yellow-400 text-white px-2 py-1 rounded\" >Modifier</button>
+                                <a  href=\"editIncome.php?id=<?= {$row['id']} ?>\"  class=\"modifier  bg-yellow-400 text-white px-2 py-1 rounded\" >Modifier</a>
                             </td>
-                   </tr> ";
+                   </tr> "
+                   
+                   ;
                  }
         ?>
         
