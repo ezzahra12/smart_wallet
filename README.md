@@ -22,7 +22,7 @@ SmartWallet est une application web simple et élégante permettant de gérer le
 
 ## 📁 Structure du projet
 
-Voici un exemple de structure, mais elle peut varier selon ton organisation réelle :
+
 
 ```
 project/
