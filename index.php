@@ -2,7 +2,18 @@
 require "incomeController.php";
 require "config.php";
 addIncome($pdo);
+session_start();
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    // Pas connecté → rediriger vers la page de login
+    header("Location: login.php");
+    exit;
+}
+
+
+?>
+<?php
 $chartRevenu = $pdo->query("SELECT amount FROM incomes");
 $valuesIN = $chartRevenu->fetchAll(PDO::FETCH_COLUMN);
 
@@ -30,7 +41,22 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
 
         <!-- SIDEBAR -->
         <div id="sidebar" class="w-64 bg-gray-800 text-white shadow-lg hidden lg:block absolute lg:relative h-full z-20">
-            <div class="p-6 text-2xl font-bold">SmartWallet</div>
+          <a href="logout.php"
+   class="px-4 py-2 rounded-lg bg-red-500 text-white font-semibold 
+          hover:bg-red-600 transition duration-300 shadow-md 
+          flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
+         stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" 
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 
+                 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 
+                 0l3-3m0 0l-3-3m3 3H9" />
+    </svg>
+    Déconnexion
+</a>
+
+        <div class="p-6 text-2xl font-bold">SmartWallet</div>
 
             <!-- CHART Income -->
             <div class="w-full flex justify-center mt-6">
@@ -63,7 +89,7 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
             <!-- HEADER -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-                <div class="text-gray-600 hidden lg:block">Welcome 👋</div>
+                <div class="text-gray-600 hidden lg:block">Welcome 👋 <?php echo  $_SESSION['username'];?></div>
             </div>
 
             <!-- CARDS -->
@@ -138,7 +164,7 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
                                         <input name='id' type='text' class='hidden' value='{$row['id']}'/>
                                         <button name='delete_income' type='submit' class='bg-red-600 text-white px-2 py-1 rounded'>Supprimer</button>
                                     </form>
-                                    <a href='editIncome.php?id={$row['id']}' class='bg-yellow-500 text-white px-2 py-1 rounded'>Modifier</a>
+                                    <a href=\"editIncome.php?id={$row['id']}\"  class='bg-yellow-500 text-white px-2 py-1 rounded'>Modifier</a>
                                 </td>
                             </tr>
                             ";
@@ -182,7 +208,7 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
                     </table>
                 </div>
             </div>
-
+         
             <!-- ADD INCOME -->
             <div class="bg-white p-6 rounded-xl shadow border border-gray-300 mt-8">
                 <h2 class="text-2xl font-bold mb-4 text-gray-900">Ajouter un Revenu</h2>

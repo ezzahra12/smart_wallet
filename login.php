@@ -34,8 +34,13 @@ session_start();
                     class="w-full bg-gray-800 text-white p-2 rounded-lg hover:bg-gray-900 transition">
                 Login
             </button>
-
         </form>
+
+        <!-- Lien vers la page d'inscription -->
+        <p class="text-center mt-4 text-gray-600 text-sm">
+            Pas encore de compte ? 
+            <a href="signup.php" class="text-gray-800 font-medium hover:underline">S'inscrire</a>
+        </p>
 
     </div>
 

@@ -1,3 +1,10 @@
+
+<?php
+session_start();
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,11 +14,15 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-
+ 
 <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
     <h2 class="text-xl font-semibold text-center mb-6">Créer un compte</h2>
+      <?php if (isset($_SESSION['error'])) {
+    echo '<p style="color:red;">' . $_SESSION['error'] . '</p>';
+    unset($_SESSION['error']); }?>
+    <form method="POST" Action="signUpAction.php" class="space-y-4">
+      
 
-    <form method="POST" class="space-y-4">
         <input type="text" name="username" placeholder="Nom d'utilisateur" required
                class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400">
         <input type="email" name="email" placeholder="Email" required

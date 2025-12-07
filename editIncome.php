@@ -4,13 +4,11 @@ include "config.php";
     $stmt=$pdo->prepare("SELECT * FROM incomes WHERE id=?");
     $stmt->execute([$id]);
     $income = $stmt->fetch(PDO::FETCH_ASSOC);
-    if(!$incomes){
+    if(!$income){
         echo"revenu introuvable";
         exit;
     }
-    else{
-        return $income;
-    }
+    
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +21,7 @@ include "config.php";
 
 <h2 class="text-2xl font-bold mb-4">Modifier le revenu</h2>
 
-<form action="updateIncome.php" method="POST" class="space-y-4 bg-white p-6 rounded shadow w-96">
+<form action="" method="POST" class="space-y-4 bg-white p-6 rounded shadow w-96">
 
     <input type="hidden" name="id" value="<?= $income['id'] ?>">
 
@@ -48,7 +46,29 @@ include "config.php";
                class="border p-2 w-full rounded">
     </div>
 
-    <button class="bg-yellow-500 text-white px-4 py-2 rounded">Sauvegarder</button>
+    <button name="modifier" class="bg-yellow-500 text-white px-4 py-2 rounded">Sauvegarder</button>
 </form>
 
 </body>
+<?php 
+if($_SERVER['REQUEST_METHOD']==='POST'){
+    if(isset($_POST['modifier'])){
+        $date=$_POST['date_income'];
+        $desc=$_POST['desp'];
+        $amount=$_POST['amount'];
+        $stmt=$pdo->prepare("UPDATE incomes set date_income= ?, desp= ?, amount= ? WHERE id= ?");
+        $stmt->execute([$date,$desc,$amount,$id]);
+    }
+    header("location: index.php");
+}
+
+
+
+
+
+
+
+
+
+
+     ?>

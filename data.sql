@@ -47,3 +47,17 @@ create table incomes(
  
  
  describe expenses;
+ use wallet;
+ create table users(
+    id int primary key AUTO_INCREMENT,
+    username VARCHAR(20) NOT NULL,
+    email varchar(200) UNIQUE NOT NULL,
+    password varchar(200) not NULL
+ )
+
+ insert into users (username,email,password) values ("salma","salma@gmail.com","234KH");
+
+
+
+ describe users;
+ select * from users;
