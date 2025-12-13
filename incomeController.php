@@ -9,10 +9,11 @@ function addIncome(PDO $pdo) {
             $date = $_POST['date'];
             $description = $_POST['description'];
             $montant = $_POST['montant'];
-            $stmt = $pdo->prepare("INSERT INTO incomes (date_income, desp, amount)  VALUES (?, ?, ?)
+            $user_id=$_SESSION['user_id'];
+            $stmt = $pdo->prepare("INSERT INTO incomes (date, description, amount,user_id)  VALUES (?, ?, ?,?)
             ");
 
-            $stmt->execute([$date, $description, $montant]);
+            $stmt->execute([$date, $description, $montant,$user_id]);
         }
 
         
@@ -21,11 +22,11 @@ function addIncome(PDO $pdo) {
             $date = $_POST['dateEx'];
             $description = $_POST['descriptionEx'];
             $montant = $_POST['montantEx'];
-
-            $stmt = $pdo->prepare("INSERT INTO expenses (date_expense, desp, amount)  VALUES (?, ?, ?)
+            $user_id=$_SESSION['user_id'];
+            $stmt = $pdo->prepare("INSERT INTO expenses (date, description, amount,user_id)  VALUES (?, ?, ?,?)
             ");
 
-            $stmt->execute([$date, $description, $montant]);
+            $stmt->execute([$date, $description, $montant,$user_id]);
         }
     }
 };

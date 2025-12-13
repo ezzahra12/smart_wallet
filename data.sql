@@ -7,6 +7,8 @@ create table incomes(
  date_income DATE,
  created_at date DEFAULT (CURRENT_DATE))
  
+ alter table incomes
+ change date_income date varchar(200);
  
  show tables;
  describe incomes;
@@ -61,3 +63,29 @@ create table incomes(
 
  describe users;
  select * from users;
+
+ use wallet;
+ALTER TABLE expenses
+ADD COLUMN user_id INT NULL,
+ADD CONSTRAINT user_id
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    ON DELETE SET NULL;
+
+    alter table expenses
+    drop COLUMN user_id;
+     describe incomes;
+
+     select * from information_schema.TABLE_CONSTRAINTS where `TABLE_NAME`='expenses';
+     show create table incomes;
+
+     SELECT * from expenses;
+SELECT * from USERs;
+update expenses
+set user_id='4' where user_id is null;
+
+describe expenses;
+
+ alter table expenses
+    drop Foreign Key  user_id;
+
+

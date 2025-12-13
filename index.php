@@ -1,8 +1,9 @@
 <?php
+session_start();
 require "incomeController.php";
 require "config.php";
 addIncome($pdo);
-session_start();
+
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -14,10 +15,11 @@ if (!isset($_SESSION['user_id'])) {
 
 ?>
 <?php
-$chartRevenu = $pdo->query("SELECT amount FROM incomes");
+$user_id=$_SESSION['user_id'];
+$chartRevenu = $pdo->query("SELECT amount FROM incomes where user_id= $user_id");
 $valuesIN = $chartRevenu->fetchAll(PDO::FETCH_COLUMN);
 
-$chartexpense=$pdo->query("SELECT amount FROM expenses");
+$chartexpense=$pdo->query("SELECT amount FROM expenses where  user_id= $user_id");
 $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
 ?>
 <!DOCTYPE html>
@@ -57,7 +59,7 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
 </a>
 
         <div class="p-6 text-2xl font-bold">SmartWallet</div>
-
+             
             <!-- CHART Income -->
             <div class="w-full flex justify-center mt-6">
                 <div class="bg-white border border-gray-300 rounded-xl shadow-md p-3"
@@ -99,7 +101,8 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
                     <h2 class="text-gray-600 text-sm">Total Revenus</h2>
                     <p class="text-3xl font-bold text-gray-900">
                         <?php
-                            $stmt=$pdo->query("SELECT SUM(amount) as total from incomes");
+                        $user_id=$_SESSION['user_id'];
+                            $stmt=$pdo->query("SELECT SUM(amount) as total from incomes where user_id= $user_id");
                             $total_incomes=$stmt->fetch();
                             echo  $total_incomes['total'];
                         ?>
@@ -152,12 +155,13 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
                         </tr>
 
                         <?php 
-                        $stmt=$pdo->query("select * from incomes");
+                        $user_id=$_SESSION['user_id'];
+                        $stmt=$pdo->query("select * from incomes where user_id = $user_id");
                         while($row=$stmt->fetch(PDO::FETCH_ASSOC)){
                             echo "
                             <tr>
-                                <td class='px-4 py-2'>{$row['date_income']}</td>
-                                <td class='px-4 py-2'>{$row['desp']}</td>
+                                <td class='px-4 py-2'>{$row['date']}</td>
+                                <td class='px-4 py-2'>{$row['description']}</td>
                                 <td class='px-4 py-2'>{$row['amount']}</td>
                                 <td class='px-4 py-2 flex gap-2'>
                                     <form action='delete.php' method='GET'>
@@ -191,15 +195,16 @@ $valuesEX=$chartexpense->fetchALL(PDO::FETCH_COLUMN);
                         while($row=$stmt->fetch(PDO:: FETCH_ASSOC)){
                             echo "
                             <tr>
-                                <td class='px-4 py-2'>{$row['date_expense']}</td>
-                                <td class='px-4 py-2'>{$row['desp']}</td>
+                                <td class='px-4 py-2'>{$row['date']}</td>
+                                <td class='px-4 py-2'>{$row['description']}</td>
                                 <td class='px-4 py-2'>{$row['amount']}</td>
                                 <td class='px-4 py-2 flex gap-2'>
                                     <form method='GET' action='delete.php'>
                                         <input name='id' type='text' class='hidden' value='{$row['id']}'/>
                                         <button name='delete_depense' class='bg-red-600 text-white px-2 py-1 rounded'>Supprimer</button>
                                     </form>
-                                    <button type='submit' class='bg-yellow-500 text-white px-2 py-1 rounded'>Modifier</button>
+                        <a href=\"editExpense.php?id={$row['id']}\"  class='bg-yellow-500 text-white px-2 py-1 rounded'>Modifier</a>
+
                                 </td>
                             </tr>
                             ";
